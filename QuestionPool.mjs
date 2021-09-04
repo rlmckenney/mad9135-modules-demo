@@ -1,5 +1,5 @@
-import {getAllQuestions} from './api.service.mjs'
-
+import { getAllQuestions } from './api.service.mjs';
+// What about BASE_URL?
 /**
  * Quiz question object
  * @typedef {Object} Question
@@ -11,7 +11,7 @@ import {getAllQuestions} from './api.service.mjs'
 
 class QuestionPool {
   constructor(questions) {
-    this.pool = questions
+    this.pool = questions;
   }
 
   /**
@@ -20,7 +20,7 @@ class QuestionPool {
    * @returns {Question}
    */
   getQuestion(id) {
-    return this.pool.get(id)
+    return this.pool.get(id);
   }
 
   /**
@@ -30,37 +30,37 @@ class QuestionPool {
    */
   selectRandomQuestions(count) {
     /** @type {Set<number>} */
-    let questionIds = new Set()
+    let questionIds = new Set();
 
     while (questionIds.size < count) {
-      const id = Math.floor(Math.random() * this.pool.size) + 1
-      questionIds.add(id)
+      const id = Math.floor(Math.random() * this.pool.size) + 1;
+      questionIds.add(id);
     }
-    
-    /* this does not work */
-    // for (i = 0; i < count; i++) {
+
+    /* this does not work... because of possible conflicting ids */
+    // for (let i = 0; i < count; i++) {
     //   const id = Math.floor(Math.random() * this.pool.size) + 1
     //   questionIds.add(id)
     // }
 
-    return questionIds
+    return questionIds;
   }
 }
 
 // Factory pattern
 export async function createQuestionPool() {
   /** @type {Set<Question>} */
-  const questions = new Map()
-  const apiData = await getAllQuestions()
-  apiData.forEach(item => questions.set(item.id, item))
+  const questions = new Map();
+  const apiData = await getAllQuestions();
+  apiData.forEach((item) => questions.set(item.id, item));
 
   // getAllQuestions().then(apiData => {
   //   apiData.forEach(item => questions.set(item.id, item))
   //   return new QuestionPool(questions)
   // })
 
-  return new QuestionPool(questions)
+  return new QuestionPool(questions);
 }
 
-const pool = createQuestionPool()
-console.log(pool)
+const pool = createQuestionPool();
+console.log(pool);
